@@ -4,9 +4,60 @@
         xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
         xmlns:local="clr-namespace:LogAnalyzer"
+        xmlns:lvc="clr-namespace:LiveCharts.Wpf;assembly=LiveCharts.Wpf"
         mc:Ignorable="d"
-        Title="MainWindow" Height="350" Width="525">
-    <Grid>
-        
+        Title="MainWindow" WindowState="Maximized">
+    <Grid ShowGridLines="True">
+        <Grid.ColumnDefinitions>
+            <ColumnDefinition Width="*"></ColumnDefinition>
+            <ColumnDefinition Width="3*"></ColumnDefinition>
+        </Grid.ColumnDefinitions>
+        <Grid Grid.Column="0" Grid.Row="0" ShowGridLines="True">
+            <Grid.RowDefinitions>
+                <RowDefinition Height="*"></RowDefinition>
+                <RowDefinition Height="5*"></RowDefinition>
+            </Grid.RowDefinitions>
+            <ListBox Grid.Column="0" Grid.Row="1" ItemsSource="{Binding Logs}"
+                 SelectedItem="{Binding SelectedLog}" DisplayMemberPath="FileName">
+            </ListBox>
+            <TextBox Grid.Column="0" Grid.Row="0" Text="{Binding SelectedLog, UpdateSourceTrigger=PropertyChanged}" />
+        </Grid>
+        <Grid Grid.Column="1" Grid.Row="0" DataContext="{Binding SelectedLog}">
+            <Grid.RowDefinitions>
+                <RowDefinition Height="*"></RowDefinition>
+                <RowDefinition Height="*"></RowDefinition>
+                <RowDefinition Height="*"></RowDefinition>
+            </Grid.RowDefinitions>
+            <StackPanel Orientation="Horizontal"  Grid.Column="0" Grid.Row="0">
+                <StackPanel Width="300" HorizontalAlignment="Left" >
+                    <ComboBox FontSize="16" FontWeight="Bold" ItemsSource="{Binding CurrentTabTypes}" SelectedItem="{Binding SelectedTabType}" />
+                    <ItemsControl ItemsSource="{Binding CurLine}">
+                        <ItemsControl.ItemTemplate>
+                            <DataTemplate>
+                                <StackPanel Orientation="Horizontal">
+                                    <TextBlock FontSize="16" FontWeight="Bold" Width="200" Text="{Binding Key}"></TextBlock>
+                                    <TextBlock FontSize="16" Width="200" Text="{Binding Value}"></TextBlock>
+                                </StackPanel>
+                            </DataTemplate>
+                        </ItemsControl.ItemTemplate>
+                    </ItemsControl>
+                </StackPanel>
+                <StackPanel Width="500">
+                    <Canvas Name="MyCanvas">
+                        
+                    </Canvas>
+                </StackPanel>
+            </StackPanel>
+            <StackPanel  Grid.Column="0" Grid.Row="1" Margin="20">
+                <lvc:CartesianChart LegendLocation="Right" Name="Chart" Series="{Binding SeriesTest}" Height="200">
+                    
+                </lvc:CartesianChart>
+            </StackPanel>
+            <StackPanel  Grid.Column="0" Grid.Row="2" Margin="20">
+                <lvc:CartesianChart LegendLocation="Right" Name="Chart2" Series="{Binding SeriesTest2}" Height="200">
+
+                </lvc:CartesianChart>
+            </StackPanel>
+        </Grid>
     </Grid>
 </Window>
