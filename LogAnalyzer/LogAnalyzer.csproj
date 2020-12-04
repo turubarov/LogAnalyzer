@@ -75,12 +75,19 @@
       <DependentUpon>App.xaml</DependentUpon>
       <SubType>Code</SubType>
     </Compile>
+    <Compile Include="Exceptions\ConfigParamException.cs" />
+    <Compile Include="Model\DataBlocks\Block0.cs" />
+    <Compile Include="Model\DataBlocks\Block1.cs" />
+    <Compile Include="Model\DataBlocks\Block2.cs" />
+    <Compile Include="Model\InputFiles\ConfigFile.cs" />
     <Compile Include="Model\MyBlock.cs" />
-    <Compile Include="Model\MyLine.cs" />
-    <Compile Include="Model\MyData.cs" />
-    <Compile Include="Model\LogFile.cs" />
+    <Compile Include="Model\DataLine.cs" />
+    <Compile Include="Model\Data.cs" />
+    <Compile Include="Model\InputFiles\LogFile.cs" />
+    <Compile Include="Model\Readers\LogsParser.cs" />
+    <Compile Include="Model\Readers\ConfigParser.cs" />
     <Compile Include="Ulils\HSLColor.cs" />
-    <Compile Include="Ulils\MyFileReader.cs" />
+    <Compile Include="Model\Readers\MyFileReader.cs" />
     <Compile Include="ViewModel\ApplicationViewModel.cs" />
     <Compile Include="MainWindow.xaml.cs">
       <DependentUpon>MainWindow.xaml</DependentUpon>

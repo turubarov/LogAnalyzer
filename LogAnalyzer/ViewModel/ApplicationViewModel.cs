@@ -13,6 +13,8 @@ using LiveCharts.Defaults;
 using System.Windows.Media;
 using System.Windows.Shapes;
 using System.Runtime.InteropServices;
+using LiveCharts.Configurations;
+using LogAnalyzer.Model.Readers;
 
 namespace LogAnalyzer
 {
@@ -31,6 +33,8 @@ namespace LogAnalyzer
         private CartesianChart chart;
         private CartesianChart chart2;
         private Canvas canvas;
+
+        //bool flag = false;
 
         public SeriesCollection SeriesTest
         {
@@ -86,6 +90,12 @@ namespace LogAnalyzer
         public ApplicationViewModel(CartesianChart chart, CartesianChart chart2, Canvas canvas)
         {
             MyFileReader fileReader = new MyFileReader();
+            ConfigFile cf = ConfigParser.Read();
+            if (cf == null)
+            {
+                System.Windows.Application.Current.Shutdown();
+                return;
+            }
             logs = new ObservableCollection<LogFile>(fileReader.Read());
             this.chart = chart;
             this.chart2 = chart2;
@@ -154,7 +164,7 @@ namespace LogAnalyzer
             Line[] ln = new Line[count];
             int iii = 0;
             int max = 0;
-            foreach (KeyValuePair<string, MyLine> cur in selectedLog.Blocks[1].Lines)
+            foreach (KeyValuePair<string, DataLine> cur in selectedLog.Blocks[1].Lines)
             {
                 if (cur.Value.Value["Number"].Value > max)
                 {
@@ -216,7 +226,9 @@ namespace LogAnalyzer
 
         public void Test()
         {
-            
+            /*if (flag)
+                return;
+            flag = true;*/
             string s = "OpeningCount";// d.Key;
             string s2 = selectedLog.SelectedTabType;
             
@@ -291,19 +303,19 @@ namespace LogAnalyzer
                     Values = points,
                     Title = "OpeningCount",
                     PointGeometry = DefaultGeometries.Diamond,
-                    DataLabels = true,
-                    Stroke = Brushes.Red,
+                    //DataLabels = true,
+                    //Stroke = Brushes.Red,
                     Fill = Brushes.Transparent,
                 },
 
-                new ColumnSeries
+                /*new ColumnSeries
                 {
                     Values = new ChartValues<ObservablePoint>{ new ObservablePoint(cur, query[cur]) },
                     MaxColumnWidth = 10,
                     Fill = Brushes.Red,
                     Title = "Current Value",
 
-                }
+                }*/
             };
 
             SeriesTest2 = new SeriesCollection
@@ -317,13 +329,13 @@ namespace LogAnalyzer
                     Stroke = Brushes.Green,
                     Fill = Brushes.Transparent
                 },
-                new ColumnSeries
+                /*new ColumnSeries
                 {
                     Values = new ChartValues<ObservablePoint>{ new ObservablePoint(curF, queryF[curF]) },
                     MaxColumnWidth = 10,
                     Fill = Brushes.Green,
                     Title = "Current Value"
-                },
+                },*/
                 new LineSeries
                 {
                     Values = pointsL,
@@ -332,14 +344,14 @@ namespace LogAnalyzer
                     Fill = Brushes.Transparent,
                     Stroke = Brushes.Blue,
                 },
-                new ColumnSeries
+                /*new ColumnSeries
                 {
                     Values = new ChartValues<ObservablePoint>{ new ObservablePoint(curL, queryL[curL]) },
                     MaxColumnWidth = 10,
                     Fill = Brushes.Blue,
                     Title = "Current Value"
 
-                },
+                },*/
                 new LineSeries
                 {
                     Values = pointsT,
@@ -348,16 +360,17 @@ namespace LogAnalyzer
                     Stroke = Brushes.Red,
                     Fill = Brushes.Transparent,
                 },
-                new ColumnSeries
+                /*new ColumnSeries
                 {
                     Values = new ChartValues<ObservablePoint>{ new ObservablePoint(curT, queryT[curT]) },
                     MaxColumnWidth = 10,
                     Fill = Brushes.Red,
                     Title = "Current Value"
-                }
+                }*/
             };
             chart.Series = SeriesTest;
             chart2.Series = SeriesTest2;
+            
         }
 
         public event PropertyChangedEventHandler PropertyChanged;

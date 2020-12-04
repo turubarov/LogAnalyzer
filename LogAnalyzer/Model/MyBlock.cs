@@ -8,10 +8,10 @@ namespace LogAnalyzer.Model
 {
     public class MyBlock
     {
-        private Dictionary<string, MyLine> lines;
+        private Dictionary<string, DataLine> lines;
         private string mask;
 
-        public Dictionary<string, MyLine> Lines
+        public Dictionary<string, DataLine> Lines
         {
             get
             {
@@ -19,7 +19,7 @@ namespace LogAnalyzer.Model
             }
         }
 
-        public MyBlock(Dictionary<string, MyLine> lines, string mask)
+        public MyBlock(Dictionary<string, DataLine> lines, string mask)
         {
             this.lines = lines;
         }

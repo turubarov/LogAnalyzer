@@ -50,8 +50,16 @@
             </StackPanel>
             <StackPanel  Grid.Column="0" Grid.Row="1" Margin="20">
                 <lvc:CartesianChart LegendLocation="Right" Name="Chart" Series="{Binding SeriesTest}" Height="200">
-                    
+                    <lvc:CartesianChart.AxisX>
+                        <lvc:Axis>
+                            <lvc:Axis.Sections>
+                                <lvc:AxisSection Value="3" Stroke="#FF00FF00" StrokeThickness="8" Panel.ZIndex="2" />
+                                <lvc:AxisSection Value="3" Stroke="#FF0000FF" StrokeThickness="13" Panel.ZIndex="1" />
+                            </lvc:Axis.Sections>
+                        </lvc:Axis>
+                    </lvc:CartesianChart.AxisX>
                 </lvc:CartesianChart>
+                
             </StackPanel>
             <StackPanel  Grid.Column="0" Grid.Row="2" Margin="20">
                 <lvc:CartesianChart LegendLocation="Right" Name="Chart2" Series="{Binding SeriesTest2}" Height="200">

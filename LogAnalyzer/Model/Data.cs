@@ -4,13 +4,13 @@ using System.Text.RegularExpressions;
 namespace LogAnalyzer.Model
 {
     enum DataType { Time, Number, String}
-    public class MyData
+    public class Data
     {
         private int value;
         private string stringValue;
         private DataType type;
 
-        public MyData(string stringValue)
+        public Data(string stringValue)
         {
             Regex timeRegex = new Regex(@"^(\d{2}):(\d{2}):(\d{2})$");
             Regex numbRegex = new Regex(@"^[0-9]+$");

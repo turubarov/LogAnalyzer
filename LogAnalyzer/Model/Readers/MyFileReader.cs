@@ -43,14 +43,14 @@ namespace LogAnalyzer.Ulils
                 while ((line = sr.ReadLine().Trim()) != "") ;
                 for (int i = 0; i < COUNT_BLOCKS; i++)
                 {
-                    Dictionary<string, MyLine> lines = new Dictionary<string, MyLine>();
+                    Dictionary<string, DataLine> lines = new Dictionary<string, DataLine>();
                     while ((line = sr.ReadLine().Trim()) != "")
                     {
-                        Dictionary<string, MyData> tmp = parseLogString(line, i);
+                        Dictionary<string, Data> tmp = parseLogString(line, i);
                         string nameLine = tmp[maskParams[i, 0]].StringValue;
                         
                         tmp.Remove(maskParams[i, 0]);
-                        MyLine l = new MyLine(tmp);
+                        DataLine l = new DataLine(tmp);
                         lines[nameLine] = l;
                         if (i == 0)
                             lParams.Add(nameLine);
@@ -65,14 +65,14 @@ namespace LogAnalyzer.Ulils
             return blocks;
         }
 
-        private Dictionary<string, MyData> parseLogString(string input, int blockNumber)
+        private Dictionary<string, Data> parseLogString(string input, int blockNumber)
         {
-            Dictionary<string, MyData> result = new Dictionary<string, MyData>();
+            Dictionary<string, Data> result = new Dictionary<string, Data>();
             Regex regex = new Regex(@"(\d{2}:\d{2}:\d{2})|(\w+)");
             MatchCollection matches = regex.Matches(input);
             for (int i = 0; i< matches.Count; i++)
             {
-                result[maskParams[blockNumber, i]] = new MyData(matches[i].Value);
+                result[maskParams[blockNumber, i]] = new Data(matches[i].Value);
             }
             return result;
         }
@@ -95,7 +95,7 @@ namespace LogAnalyzer.Ulils
         private string[,] getMaskParams(string[] masks)
         {
             string[,] maskParams = new string[COUNT_BLOCKS, MAX_PARAMS];
-            Regex regex = new Regex(@"%[\w]+%");
+            Regex regex = new Regex(@"%[\w\s]+%");
             for (int i = 0; i < COUNT_BLOCKS; i++)
             {
                 MatchCollection matches = regex.Matches(masks[i]);

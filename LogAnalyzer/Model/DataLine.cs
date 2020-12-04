@@ -6,11 +6,11 @@ using System.Threading.Tasks;
 
 namespace LogAnalyzer.Model
 {
-    public class MyLine
+    public class DataLine
     {
-        private Dictionary<string, MyData> value;
+        private Dictionary<string, Data> value;
 
-        public Dictionary<string, MyData>  Value
+        public Dictionary<string, Data>  Value
         {
             get
             {
@@ -18,7 +18,7 @@ namespace LogAnalyzer.Model
             }
         }
 
-        public MyLine(Dictionary<string, MyData> value)
+        public DataLine(Dictionary<string, Data> value)
         {
             this.value = value;
             //value = new Dictionary<string, MyData>();

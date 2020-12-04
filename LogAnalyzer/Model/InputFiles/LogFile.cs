@@ -3,15 +3,27 @@ using System.Collections.Generic;
 using System.ComponentModel;
 using System.IO;
 using System.Runtime.CompilerServices;
+using LogAnalyzer.Model.DataBlocks;
 
 namespace LogAnalyzer.Model
 {
     public class LogFile : INotifyPropertyChanged
     {
+        // путь до директории с логами
         private string filePath;
+
+        // название файла лога
         private string fileName;
+
+
         private string[,] maskParams;
         private string[] lineParams;
+
+        // блоки данных
+        private Block0 block0;
+        private Block1 block1;
+        private Block2 block2;
+
         private List<MyBlock> blocks;
 
         public string[,] MaskParams
@@ -65,8 +77,8 @@ namespace LogAnalyzer.Model
             //selectedTabType = Blocks[0].Lines[mas];
         }
 
-        private Dictionary<string, MyData> curLine;
-        public Dictionary<string, MyData> CurLine
+        private Dictionary<string, Data> curLine;
+        public Dictionary<string, Data> CurLine
         {
             get
             {
