@@ -20,9 +20,9 @@ namespace LogAnalyzer.Model
         private string[] lineParams;
 
         // блоки данных
-        private Block0 block0;
-        private Block1 block1;
-        private Block2 block2;
+        private DataBlock0 dataBlock0;
+        private DataBlock1 dataBlock1;
+        private DataBlock2 dataBlock2;
 
         private List<MyBlock> blocks;
 
@@ -36,6 +36,15 @@ namespace LogAnalyzer.Model
 
         public event PropertyChangedEventHandler PropertyChanged;
 
+        public LogFile(string fileName, DataBlock0 dataBlock0, DataBlock1 dataBlock1, DataBlock2 dataBlock2)
+        {
+            this.fileName = fileName;
+            this.dataBlock0 = dataBlock0;
+            this.dataBlock1 = dataBlock1;
+            this.dataBlock2 = dataBlock2;
+            
+        }
+
         public LogFile(string filePath, List<MyBlock> blocks, string[,] maskParams, string[] lineParams)
         {
             this.filePath = filePath;
@@ -44,13 +53,6 @@ namespace LogAnalyzer.Model
             this.lineParams = lineParams;
             fileName = Path.GetFileName(filePath);
         }
-
-        private string readFile()
-        {
-            return File.ReadAllText(filePath);
-        }
-
-        //private List<>
 
         public List<MyBlock> Blocks
         {
@@ -64,7 +66,7 @@ namespace LogAnalyzer.Model
             set
             {
                 selectedTabType = value;
-                curLine = Blocks[0].Lines[selectedTabType].Value;
+                curLine = Blocks[0].Lines[selectedTabType].Values;
                 OnPropertyChanged("SelectedTabType");
                 OnPropertyChanged("CurLine");
             }

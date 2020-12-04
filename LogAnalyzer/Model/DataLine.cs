@@ -8,19 +8,19 @@ namespace LogAnalyzer.Model
 {
     public class DataLine
     {
-        private Dictionary<string, Data> value;
+        private Dictionary<string, Data> values;
 
-        public Dictionary<string, Data>  Value
+        public Dictionary<string, Data> Values
         {
             get
             {
-                return value;
+                return values;
             }
         }
 
-        public DataLine(Dictionary<string, Data> value)
+        public DataLine(Dictionary<string, Data> values)
         {
-            this.value = value;
+            this.values = values;
             //value = new Dictionary<string, MyData>();
         }
     }

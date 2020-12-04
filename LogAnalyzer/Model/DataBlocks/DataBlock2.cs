@@ -6,11 +6,11 @@ using System.Threading.Tasks;
 
 namespace LogAnalyzer.Model.DataBlocks
 {
-    class Block0
+    public class DataBlock2
     {
         private Dictionary<string, DataLine> lines;
 
-        public Block0(Dictionary<string, DataLine> lines)
+        public DataBlock2(Dictionary<string, DataLine> lines)
         {
             this.lines = lines;
         }

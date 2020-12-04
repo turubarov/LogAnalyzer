@@ -10,11 +10,11 @@ using System.Windows;
 
 namespace LogAnalyzer.Model.Readers
 {
-    class ConfigParser
+    public class ConfigParser
     {
         private static string[] REQUIRED_CONFIG_PARAMS = new string[] { "Directory", "Block0", "Block1", "Block2" };
 
-        public static ConfigFile Read()
+        public static ConfigFile Parse()
         {
             try
             {
@@ -43,7 +43,14 @@ namespace LogAnalyzer.Model.Readers
             Dictionary<string, string> confStrings;
 
             confText = File.ReadAllLines(Directory.GetCurrentDirectory() + "\\config.txt");
-            confStrings = confText.ToDictionary(s => s.Split(new char[] { '=' }, 2)[0], s => s.Split(new char[] { '=' }, 2)[1]);
+            try
+            { 
+                confStrings = confText.ToDictionary(s => s.Split(new char[] { '=' }, 2)[0], s => s.Split(new char[] { '=' }, 2)[1]);
+            }
+            catch (IndexOutOfRangeException)
+            {
+                throw new ConfigParamException("Неправильный формат параметра в конфигурационном файле");
+            }
             foreach (string param in REQUIRED_CONFIG_PARAMS)
             {
                 if (!confStrings.ContainsKey(param))

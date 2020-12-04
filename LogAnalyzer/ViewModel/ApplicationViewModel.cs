@@ -90,8 +90,9 @@ namespace LogAnalyzer
         public ApplicationViewModel(CartesianChart chart, CartesianChart chart2, Canvas canvas)
         {
             MyFileReader fileReader = new MyFileReader();
-            ConfigFile cf = ConfigParser.Read();
-            if (cf == null)
+            ConfigFile configFile = ConfigParser.Parse();
+            logs = new ObservableCollection<LogFile>(LogsParser.Parse(configFile));
+            if (configFile == null)
             {
                 System.Windows.Application.Current.Shutdown();
                 return;
@@ -166,9 +167,9 @@ namespace LogAnalyzer
             int max = 0;
             foreach (KeyValuePair<string, DataLine> cur in selectedLog.Blocks[1].Lines)
             {
-                if (cur.Value.Value["Number"].Value > max)
+                if (cur.Value.Values["Number"].Value > max)
                 {
-                    max = cur.Value.Value["Number"].Value;
+                    max = cur.Value.Values["Number"].Value;
                 }
             }
             foreach (string cur in selectedLog.Blocks[1].Lines.Keys)
@@ -185,7 +186,7 @@ namespace LogAnalyzer
                 
                 for (int j = 0; j < st.Length; j++)
                 {
-                    if (selectedLog.Blocks[1].Lines[cur].Value["To"].StringValue == st[j])
+                    if (selectedLog.Blocks[1].Lines[cur].Values["To"].StringValue == st[j])
                     {
                         i2 = j;
                         break;
@@ -233,11 +234,11 @@ namespace LogAnalyzer
             string s2 = selectedLog.SelectedTabType;
             
             List<int> test2 = new List<int>();
-            int[] values = logs.Select(l => l.Blocks[0].Lines[s2].Value[s].Value).ToArray();
+            int[] values = logs.Select(l => l.Blocks[0].Lines[s2].Values[s].Value).ToArray();
 
-            int[] valuesF = logs.Select(l => l.Blocks[0].Lines[s2].Value["FirstTime"].Value).ToArray();
-            int[] valuesL = logs.Select(l => l.Blocks[0].Lines[s2].Value["LongestTime"].Value).ToArray();
-            int[] valuesT = logs.Select(l => l.Blocks[0].Lines[s2].Value["TotalTime"].Value).ToArray();
+            int[] valuesF = logs.Select(l => l.Blocks[0].Lines[s2].Values["FirstTime"].Value).ToArray();
+            int[] valuesL = logs.Select(l => l.Blocks[0].Lines[s2].Values["LongestTime"].Value).ToArray();
+            int[] valuesT = logs.Select(l => l.Blocks[0].Lines[s2].Values["TotalTime"].Value).ToArray();
 
             Dictionary<int, int> query = values.GroupBy(x => x)
               .ToDictionary(x => x.Key, y => y.Count());
@@ -290,11 +291,11 @@ namespace LogAnalyzer
                 pointsT.Add(new ObservablePoint(keysT[i], queryT[keysT[i]]));
             }
 
-            int cur = selectedLog.Blocks[0].Lines[s2].Value["OpeningCount"].Value;
+            int cur = selectedLog.Blocks[0].Lines[s2].Values["OpeningCount"].Value;
 
-            int curF = selectedLog.Blocks[0].Lines[s2].Value["FirstTime"].Value;
-            int curL = selectedLog.Blocks[0].Lines[s2].Value["LongestTime"].Value;
-            int curT = selectedLog.Blocks[0].Lines[s2].Value["TotalTime"].Value;
+            int curF = selectedLog.Blocks[0].Lines[s2].Values["FirstTime"].Value;
+            int curL = selectedLog.Blocks[0].Lines[s2].Values["LongestTime"].Value;
+            int curT = selectedLog.Blocks[0].Lines[s2].Values["TotalTime"].Value;
 
             SeriesTest = new SeriesCollection
             {
