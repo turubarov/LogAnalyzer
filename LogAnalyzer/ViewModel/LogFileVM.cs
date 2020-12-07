@@ -26,6 +26,7 @@ namespace LogAnalyzer.ViewModel
             }
             set
             {
+                string old = selectedTabType;
                 selectedTabType = value;
                 selectedDataLine = logFile.DataBlock0.getDataLine(selectedTabType);
                 OnPropertyChanged("SelectedTabType");

@@ -69,6 +69,7 @@
     </ApplicationDefinition>
     <Compile Include="Model\LogAnalyzerApplication.cs" />
     <Compile Include="ViewModel\LogFileVM.cs" />
+    <Compile Include="View\LogAnalyzerApplicationView.cs" />
     <Page Include="MainWindow.xaml">
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>

@@ -42,8 +42,8 @@
                         </ItemsControl.ItemTemplate>
                     </ItemsControl>
                 </StackPanel>
-                <StackPanel Width="500">
-                    <Canvas Name="MyCanvas">
+                <StackPanel Width="300">
+                    <Canvas Name="GraphCanvas">
                         
                     </Canvas>
                 </StackPanel>

@@ -3,6 +3,8 @@
     public class DataBlock1
     {
         private int[,] countOfTransitions;
+        public int[,] CountOfTransitions { get { return countOfTransitions;  } }
+
         private string[] tabTypes;
 
         public DataBlock1(int[,] countOfTransitions, string[] tabTypes)
@@ -11,7 +13,7 @@
             this.tabTypes = tabTypes;
         }
 
-        public int getCountOfTransitions(string tabFirst, string tabSecond)
+        public int getCountOfTransition(string tabFirst, string tabSecond)
         {
             int tabFirstIndex = 0;
             int tabSecondIndex = 0;

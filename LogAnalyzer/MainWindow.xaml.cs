@@ -1,4 +1,5 @@
 ﻿using LogAnalyzer.Model;
+using LogAnalyzer.View;
 using System.Windows;
 
 namespace LogAnalyzer
@@ -10,12 +11,14 @@ namespace LogAnalyzer
     {
         private LogAnalyzerApplication application;
         private LogAnalyzerApplicationVM applicationVM;
+        private LogAnalyzerApplicationView applicationView;
 
         public MainWindow()
         {
             InitializeComponent();
             application = new LogAnalyzerApplication();
             applicationVM = new LogAnalyzerApplicationVM(application);
+            applicationView = new LogAnalyzerApplicationView(this, applicationVM);
             DataContext = applicationVM;
         }
     }
