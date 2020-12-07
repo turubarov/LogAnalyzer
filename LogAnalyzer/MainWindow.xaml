@@ -58,13 +58,13 @@
             
             <StackPanel  Grid.Column="0" Grid.Row="1" Margin="20">
                 <lvc:CartesianChart LegendLocation="Right" Name="Chart" Series="{Binding Block0SeriesUp}" Height="200">
-                   
+
                     <!--<lvc:CartesianChart.AxisX>
                         <lvc:Axis>
                             <lvc:Axis.Sections>
-                                <lvc:AxisSection Value="3" Stroke="#FFFF0000" StrokeThickness="3" Panel.ZIndex="3" />
-                                <lvc:AxisSection Value="3" Stroke="#FF00FF00" StrokeThickness="8" Panel.ZIndex="2" />
-                                <lvc:AxisSection Value="3" Stroke="#FF0000FF" StrokeThickness="13" Panel.ZIndex="1" />
+                                <lvc:AxisSection Value="3" Stroke="#FFFF0000" StrokeThickness="2" Panel.ZIndex="3" />
+                                <lvc:AxisSection Value="3" Stroke="#FF00FF00" StrokeThickness="5" Panel.ZIndex="2" />
+                                <lvc:AxisSection Value="3" Stroke="#FF0000FF" StrokeThickness="8" Panel.ZIndex="1" />
                             </lvc:Axis.Sections>
                         </lvc:Axis>
                     </lvc:CartesianChart.AxisX>-->
@@ -75,6 +75,19 @@
                 <lvc:CartesianChart LegendLocation="Right" Name="Chart2" Series="{Binding Block0SeriesBottom}" Height="200">
 
                 </lvc:CartesianChart>
+            </StackPanel>
+            <StackPanel HorizontalAlignment="Left" Grid.Column="2" Grid.Row="0">
+                <ComboBox FontSize="16" FontWeight="Bold" ItemsSource="{Binding SelectedLog.TabTypes2}"  SelectedItem="{Binding SelectedLog.SelectedTabType2}"/>
+                <ItemsControl ItemsSource="{Binding SelectedLog.SelectedDataLine2.Values}">
+                    <ItemsControl.ItemTemplate>
+                        <DataTemplate>
+                            <StackPanel Orientation="Horizontal">
+                                <TextBlock FontSize="16" FontWeight="Bold" Width="200" Text="{Binding Key}"></TextBlock>
+                                <TextBlock FontSize="16" Width="200" Text="{Binding Value}"></TextBlock>
+                            </StackPanel>
+                        </DataTemplate>
+                    </ItemsControl.ItemTemplate>
+                </ItemsControl>
             </StackPanel>
         </Grid>
     </Grid>

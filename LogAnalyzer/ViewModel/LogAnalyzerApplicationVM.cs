@@ -7,7 +7,6 @@ using LiveCharts.Wpf;
 using System;
 using LiveCharts.Defaults;
 using System.Windows.Media;
-using System.Runtime.InteropServices;
 using LogAnalyzer.ViewModel;
 using System.Runtime.CompilerServices;
 
@@ -21,6 +20,7 @@ namespace LogAnalyzer
         private ConfigFile configFile;
 
         private string selectedTabType;
+        private string selectedTabType2;
 
         private LogFileVM selectedLog;
         public LogFileVM SelectedLog
@@ -32,8 +32,11 @@ namespace LogAnalyzer
             set
             {
                 selectedTabType = selectedLog.SelectedTabType;
+                selectedTabType2 = selectedLog.SelectedTabType2;
                 selectedLog = value;
                 selectedLog.SelectedTabType = selectedTabType;
+                selectedLog.SelectedTabType2 = selectedTabType2;
+
                 selectedLog.PropertyChanged += onChangeTabType;
                 OnPropertyChanged("SelectedLog");
                 OnPropertyChanged("RedrawGraph");
@@ -61,6 +64,8 @@ namespace LogAnalyzer
             selectedLog = logFilesVM[0];
             selectedLog.PropertyChanged += onChangeTabType;
             selectedLog.selectFirstTabType();
+            selectedLog.selectFirstTabType2();
+
             pieBlock0Series = calcPieBlock0Series();
             OnPropertyChanged("RedrawGraph");
             OnPropertyChanged("PieBlock0Series");

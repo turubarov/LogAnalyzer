@@ -52,7 +52,7 @@ namespace LogAnalyzer.Model.Parsers
                     dataLines = new Dictionary<string, DataLine>() ;
                     do
                     {
-                        dataLine = parseBlock2String(line, configFile.Block0Params);
+                        dataLine = parseBlock2String(line, configFile.Block2Params);
                         dataLines.Add(dataLine.Key, dataLine.Value);
                     }
                     while ((line = sr.ReadLine().Trim()) != "");
@@ -113,7 +113,7 @@ namespace LogAnalyzer.Model.Parsers
                 values[block2Params[4]] = new Data("0"); 
             }
             DataLine dataLine = new DataLine(values);
-            return new KeyValuePair<string, DataLine>(matches[0].Value + matches[1].Value, dataLine);
+            return new KeyValuePair<string, DataLine>(matches[0].Value +"-"+ matches[1].Value, dataLine);
         }
 
         private static void skipLine(StreamReader sr)

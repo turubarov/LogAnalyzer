@@ -17,6 +17,9 @@ namespace LogAnalyzer.ViewModel
         private string[] tabTypes;
         public string[] TabTypes { get { return tabTypes; } }
 
+        private string[] tabTypes2;
+        public string[] TabTypes2 { get { return tabTypes2; } }
+
         private string selectedTabType;
         public string SelectedTabType
         {
@@ -37,15 +40,41 @@ namespace LogAnalyzer.ViewModel
         private DataLine selectedDataLine;
         public DataLine SelectedDataLine { get { return selectedDataLine;  } }
 
+        private string selectedTabType2;
+        public string SelectedTabType2
+        {
+            get
+            {
+                return selectedTabType2;
+            }
+            set
+            {
+                string old = selectedTabType2;
+                selectedTabType2 = value;
+                selectedDataLine2 = logFile.DataBlock2.getDataLine(selectedTabType2);
+                OnPropertyChanged("SelectedTabType2");
+                OnPropertyChanged("SelectedDataLine2");
+            }
+        }
+
+        private DataLine selectedDataLine2;
+        public DataLine SelectedDataLine2 { get { return selectedDataLine2; } }
+
         public LogFileVM(LogFile logFile)
         {
             this.logFile = logFile;
             this.tabTypes = logFile.DataBlock0.getTabTypes();
+            this.tabTypes2 = logFile.DataBlock2.getTabTypes();
         }
 
         public void selectFirstTabType()
         {
             SelectedTabType = tabTypes[0];
+        }
+
+        public void selectFirstTabType2()
+        {
+            SelectedTabType2 = tabTypes2[0];
         }
 
         public event PropertyChangedEventHandler PropertyChanged;
