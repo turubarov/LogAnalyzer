@@ -83,14 +83,12 @@
     <Compile Include="Model\DataBlocks\DataBlock1.cs" />
     <Compile Include="Model\DataBlocks\DataBlock2.cs" />
     <Compile Include="Model\InputFiles\ConfigFile.cs" />
-    <Compile Include="Model\MyBlock.cs" />
     <Compile Include="Model\DataLine.cs" />
     <Compile Include="Model\Data.cs" />
     <Compile Include="Model\InputFiles\LogFile.cs" />
     <Compile Include="Parsers\LogsParser.cs" />
     <Compile Include="Parsers\ConfigParser.cs" />
     <Compile Include="Ulils\HSLColor.cs" />
-    <Compile Include="Parsers\MyFileReader.cs" />
     <Compile Include="ViewModel\LogAnalyzerApplicationVM.cs" />
     <Compile Include="MainWindow.xaml.cs">
       <DependentUpon>MainWindow.xaml</DependentUpon>

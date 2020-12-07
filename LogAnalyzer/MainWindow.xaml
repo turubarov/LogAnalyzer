@@ -15,12 +15,15 @@
         <Grid Grid.Column="0" Grid.Row="0" ShowGridLines="True">
             <Grid.RowDefinitions>
                 <RowDefinition Height="*"></RowDefinition>
-                <RowDefinition Height="5*"></RowDefinition>
+                <RowDefinition Height="2*"></RowDefinition>
             </Grid.RowDefinitions>
+            <lvc:PieChart Grid.Column="0" Grid.Row="0" Series="{Binding PieBlock0Series}">
+                
+            </lvc:PieChart>
+
             <ListBox Grid.Column="0" Grid.Row="1" ItemsSource="{Binding LogFilesVM}"
                  SelectedItem="{Binding SelectedLog}" DisplayMemberPath="FileName">
             </ListBox>
-            <TextBox Grid.Column="0" Grid.Row="0" Text="{Binding SelectedLog, UpdateSourceTrigger=PropertyChanged}" />
         </Grid>
         <Grid Grid.Column="1" Grid.Row="0" >
             <Grid.RowDefinitions>
@@ -28,8 +31,13 @@
                 <RowDefinition Height="*"></RowDefinition>
                 <RowDefinition Height="*"></RowDefinition>
             </Grid.RowDefinitions>
-            <StackPanel Orientation="Horizontal"  Grid.Column="0" Grid.Row="0">
-                <StackPanel Width="300" HorizontalAlignment="Left" >
+            <Grid.ColumnDefinitions>
+                <ColumnDefinition Width="*"></ColumnDefinition>
+                <ColumnDefinition Width="*"></ColumnDefinition>
+                <ColumnDefinition Width="*"></ColumnDefinition>
+            </Grid.ColumnDefinitions>
+
+            <StackPanel HorizontalAlignment="Left" Grid.Column="0" Grid.Row="0">
                     <ComboBox FontSize="16" FontWeight="Bold" ItemsSource="{Binding SelectedLog.TabTypes}"  SelectedItem="{Binding SelectedLog.SelectedTabType}"/>
                     <ItemsControl ItemsSource="{Binding SelectedLog.SelectedDataLine.Values}">
                         <ItemsControl.ItemTemplate>
@@ -42,12 +50,12 @@
                         </ItemsControl.ItemTemplate>
                     </ItemsControl>
                 </StackPanel>
-                <StackPanel Width="300">
+            <StackPanel  Grid.Column="1" Grid.Row="0">
                     <Canvas Name="GraphCanvas">
                         
                     </Canvas>
                 </StackPanel>
-            </StackPanel>
+            
             <StackPanel  Grid.Column="0" Grid.Row="1" Margin="20">
                 <lvc:CartesianChart LegendLocation="Right" Name="Chart" Series="{Binding Block0SeriesUp}" Height="200">
                    

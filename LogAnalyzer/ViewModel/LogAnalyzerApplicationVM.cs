@@ -46,6 +46,9 @@ namespace LogAnalyzer
         private SeriesCollection block0SeriesBottom;
         public SeriesCollection Block0SeriesBottom { get { return block0SeriesBottom; } }
 
+        private SeriesCollection pieBlock0Series;
+        public SeriesCollection PieBlock0Series { get { return pieBlock0Series; } }
+
         private LogAnalyzerApplication application;
 
         public LogAnalyzerApplicationVM(LogAnalyzerApplication application)
@@ -58,7 +61,9 @@ namespace LogAnalyzer
             selectedLog = logFilesVM[0];
             selectedLog.PropertyChanged += onChangeTabType;
             selectedLog.selectFirstTabType();
+            pieBlock0Series = calcPieBlock0Series();
             OnPropertyChanged("RedrawGraph");
+            OnPropertyChanged("PieBlock0Series");
         }
 
         private void onChangeTabType(object sender, PropertyChangedEventArgs e)
@@ -68,8 +73,10 @@ namespace LogAnalyzer
                 string selTabType = selectedLog.SelectedTabType;
                 block0SeriesUp = calcBlock0SeriesUp(selTabType);
                 block0SeriesBottom = calcBlock0SeriesBottom(selTabType);
+                pieBlock0Series = calcPieBlock0Series();
                 OnPropertyChanged("Block0SeriesUp");
                 OnPropertyChanged("Block0SeriesBottom");
+                OnPropertyChanged("PieBlock0Series");
             }
         }
 
@@ -111,27 +118,36 @@ namespace LogAnalyzer
             return result;
         }
 
+        private SeriesCollection calcPieBlock0Series()
+        {
+            return new SeriesCollection
+            {
+                new PieSeries
+                {
+                    Title = configFile.Block0Params[2],
+                    Values = new ChartValues<int> {selectedLog.DataBlock0.getDataLine(selectedLog.SelectedTabType).Values[configFile.Block0Params[2]].Value},
+                    DataLabels = true,
+                },
+                new PieSeries
+                {
+                    Title = configFile.Block0Params[3],
+                    Values = new ChartValues<int> {selectedLog.DataBlock0.getDataLine(selectedLog.SelectedTabType).Values[configFile.Block0Params[3]].Value},
+                    DataLabels = true,
+                },
+                new PieSeries
+                {
+                    Title = configFile.Block0Params[4],
+                    Values = new ChartValues<int> {selectedLog.DataBlock0.getDataLine(selectedLog.SelectedTabType).Values[configFile.Block0Params[4]].Value},
+                    DataLabels = true,
+                }
+            };
+        }
+
         public event PropertyChangedEventHandler PropertyChanged;
 
         public void OnPropertyChanged([CallerMemberName]string prop = "")
         {
             PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(prop));
-        }
-
-        
-        System.Drawing.Color ccc;
-
-        /*
-
-System.Drawing.Color[] colorArray = new System.Drawing.Color[19];
-for (int hue = 0; hue < 19; hue++)
-{
-colorArray[hue] = (System.Drawing.Color)new HSLColor(hue * 20, 0.25 * 360, 1.0 * 360);
-}
-int yyy = 5;
-}
-}  */
-
-        
+        } 
     }
 }

@@ -66,10 +66,10 @@ namespace LogAnalyzer.View
                     Text = tabTypes[i],
                 };
 
-                double x = 110 * Math.Cos(Math.PI * 2 / count * i);
-                double y = 110 * Math.Sin(Math.PI * 2 / count * i);
-                Canvas.SetTop(el[i], 120 + y);
-                Canvas.SetLeft(el[i], 180 + x);
+                double x = 100 * Math.Cos(Math.PI * 2 / count * i);
+                double y = 100 * Math.Sin(Math.PI * 2 / count * i);
+                Canvas.SetTop(el[i], 110 + y);
+                Canvas.SetLeft(el[i], 130 + x);
 
                 canvas.Children.Add(el[i]);
                 canvas.Children.Add(tb[i]);
@@ -77,13 +77,13 @@ namespace LogAnalyzer.View
 
                 if (x > 0)
                 {
-                    Canvas.SetTop(tb[i], 120 + y + 5);
-                    Canvas.SetLeft(tb[i], 180 + x + 5);
+                    Canvas.SetTop(tb[i], 110 + y + 5);
+                    Canvas.SetLeft(tb[i], 130 + x + 5);
                 }
                 else
                 {
-                    Canvas.SetTop(tb[i], 120 + y + 5);
-                    Canvas.SetLeft(tb[i], 180 + x - tb[i].ActualWidth - 5);
+                    Canvas.SetTop(tb[i], 110 + y + 5);
+                    Canvas.SetLeft(tb[i], 130 + x - tb[i].ActualWidth - 5);
                 }
             }
 
@@ -97,9 +97,16 @@ namespace LogAnalyzer.View
                         max = countOfTransition[i, j];
 
             System.Drawing.Color[] ccc = new System.Drawing.Color[max];
-            for (int i = 0; i < max; i++)
+            if (max > 1)
             {
-                ccc[i] = System.Drawing.ColorTranslator.FromWin32(ColorHLSToRGB(80 / (max - 1) * (max - i - 1), 120, 240));
+                for (int i = 0; i < max; i++)
+                {
+                    ccc[i] = System.Drawing.ColorTranslator.FromWin32(ColorHLSToRGB(80 / (max - 1) * (max - i - 1), 120, 240));
+                }
+            } 
+            else
+            {
+                ccc[0] = System.Drawing.ColorTranslator.FromWin32(ColorHLSToRGB(80, 120, 240));
             }
             int xi = 0;
             int yi = 0;
@@ -156,68 +163,6 @@ namespace LogAnalyzer.View
                 }
             }
         }
-
-        /*public void Test2()
-        {
-
-            count = selectedLog.Blocks[1].Lines.Count;
-            int i1 = 0, i2 = 0;
-            Line[] ln = new Line[count];
-            int iii = 0;
-            int max = 0;
-            foreach (KeyValuePair<string, DataLine> cur in selectedLog.Blocks[1].Lines)
-            {
-                if (cur.Value.Values["Number"].Value > max)
-                {
-                    max = cur.Value.Values["Number"].Value;
-                }
-            }
-            foreach (string cur in selectedLog.Blocks[1].Lines.Keys)
-            {
-
-                for (int j = 0; j < st.Length; j++)
-                {
-                    if (cur == st[j])
-                    {
-                        i1 = j;
-                        break;
-                    }
-                }
-                
-                for (int j = 0; j < st.Length; j++)
-                {
-                    if (selectedLog.Blocks[1].Lines[cur].Values["To"].StringValue == st[j])
-                    {
-                        i2 = j;
-                        break;
-                    }
-                }
-                ccc = System.Drawing.ColorTranslator.FromWin32(ColorHLSToRGB(0, 120, 240));
-                ln[iii] = new Line
-                {
-                    X1 = Canvas.GetLeft(el[i1]) + 4,
-                    Y1 = Canvas.GetTop(el[i1]) + 4,
-                    X2 = Canvas.GetLeft(el[i2]) + 4,
-                    Y2 = Canvas.GetTop(el[i2]) + 4,
-                    StrokeThickness = 2,
-                    Stroke = new SolidColorBrush(Color.FromRgb(ccc.R, ccc.G, ccc.B)),
-                };
-                double x1 = Canvas.GetLeft(el[i1]) + 4;
-                double y1 = Canvas.GetTop(el[i1]) + 4;
-                double x2 = Canvas.GetLeft(el[i2]) + 4;
-                double y2 = Canvas.GetTop(el[i2]) + 4;
-
-                double len = Math.Sqrt(Math.Pow(Math.Abs(x2 - x1), 2) + Math.Pow(Math.Abs(y2 - y1), 2));
-                double alpha = Math.Acos((x2 - x1) / len);
-                if (y1 - y2 < 0 )
-                {
-                    alpha = Math.PI * 2 - alpha;
-                }
-
-                canvas.Children.Add(ln[iii]);
-                iii++;
-            }
-        }*/
 
         private void onMouseDown(object sender, MouseButtonEventArgs e)
         {
