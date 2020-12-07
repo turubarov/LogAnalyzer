@@ -10,18 +10,16 @@ namespace LogAnalyzer.Model
     {
         private Dictionary<string, Data> values;
 
-        public Dictionary<string, Data> Values
-        {
-            get
-            {
-                return values;
-            }
-        }
+        public Dictionary<string, Data> Values { get { return values; } }
 
         public DataLine(Dictionary<string, Data> values)
         {
             this.values = values;
-            //value = new Dictionary<string, MyData>();
+        }
+
+        public Data getValue(string valueType)
+        {
+            return values[valueType];
         }
     }
 }

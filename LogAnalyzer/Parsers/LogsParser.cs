@@ -4,7 +4,7 @@ using System.IO;
 using System.Text;
 using System.Text.RegularExpressions;
 
-namespace LogAnalyzer.Model.Readers
+namespace LogAnalyzer.Model.Parsers
 {
     public class LogsParser
     {
@@ -49,7 +49,7 @@ namespace LogAnalyzer.Model.Readers
                     line = skipEmptyLines(sr);
 
                     // чтение второго блока данных
-                    dataLines.Clear();
+                    dataLines = new Dictionary<string, DataLine>() ;
                     do
                     {
                         dataLine = parseBlock2String(line, configFile.Block0Params);

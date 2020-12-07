@@ -7,22 +7,29 @@ using LogAnalyzer.Model.DataBlocks;
 
 namespace LogAnalyzer.Model
 {
-    public class LogFile : INotifyPropertyChanged
+    public class LogFile 
     {
         // путь до директории с логами
         private string filePath;
 
         // название файла лога
         private string fileName;
-
+        public string FileName { get { return fileName; } }
 
         private string[,] maskParams;
         private string[] lineParams;
 
         // блоки данных
         private DataBlock0 dataBlock0;
+        public DataBlock0 DataBlock0 { get { return dataBlock0; } }
+
         private DataBlock1 dataBlock1;
+        public DataBlock1 DataBlock1 { get { return dataBlock1; } }
+
         private DataBlock2 dataBlock2;
+        public DataBlock2 DataBlock2 { get { return dataBlock2; } }
+
+        
 
         private List<MyBlock> blocks;
 
@@ -42,7 +49,6 @@ namespace LogAnalyzer.Model
             this.dataBlock0 = dataBlock0;
             this.dataBlock1 = dataBlock1;
             this.dataBlock2 = dataBlock2;
-            
         }
 
         public LogFile(string filePath, List<MyBlock> blocks, string[,] maskParams, string[] lineParams)
@@ -59,8 +65,23 @@ namespace LogAnalyzer.Model
             get { return blocks; }
         }
 
-        private string selectedTabType;
+       
+
+        /*private string selectedTabType;
         public string SelectedTabType
+        {
+            get
+            {
+                return selectedTabType;
+            }
+            set
+            {
+                selectedTabType = value;
+            }
+        }*/
+
+        /*private string selectedTabType;
+          public string SelectedTabType
         {
             get { return selectedTabType; }
             set
@@ -70,14 +91,14 @@ namespace LogAnalyzer.Model
                 OnPropertyChanged("SelectedTabType");
                 OnPropertyChanged("CurLine");
             }
-        }
+        }*/
 
-        public void SelectFirstItem()
+        /*public void SelectFirstItem()
         {
             int i = 3;
             i += 2;
             //selectedTabType = Blocks[0].Lines[mas];
-        }
+        }*/
 
         private Dictionary<string, Data> curLine;
         public Dictionary<string, Data> CurLine
@@ -93,7 +114,7 @@ namespace LogAnalyzer.Model
             }
         }
 
-        public List<string> CurrentTabTypes
+        /*public List<string> CurrentTabTypes
         {
             get
             {
@@ -101,7 +122,7 @@ namespace LogAnalyzer.Model
                 SelectedTabType = lineParams[0];
                 return l;
             }
-        }
+        }*/
 
         public string FilePath
         {
@@ -113,7 +134,7 @@ namespace LogAnalyzer.Model
             }
         }
 
-        public string FileName
+        /*public string FileName
         {
             get { return fileName; }
             set
@@ -121,7 +142,7 @@ namespace LogAnalyzer.Model
                 fileName = value;
                 OnPropertyChanged("FileName");
             }
-        }
+        }*/
 
         public void OnPropertyChanged([CallerMemberName]string prop = "")
         {

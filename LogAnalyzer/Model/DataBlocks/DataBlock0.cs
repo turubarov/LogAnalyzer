@@ -19,5 +19,10 @@ namespace LogAnalyzer.Model.DataBlocks
         {
             return dataLines.Keys.ToArray();
         }
+
+        public DataLine getDataLine(string tabType)
+        {
+            return dataLines[tabType];
+        }
     }
 }

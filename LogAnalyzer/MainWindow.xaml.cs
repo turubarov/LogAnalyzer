@@ -1,7 +1,5 @@
-﻿//using System.Drawing;
+﻿using LogAnalyzer.Model;
 using System.Windows;
-using System.Windows.Controls;
-using System.Windows.Shapes;
 
 namespace LogAnalyzer
 {
@@ -10,13 +8,15 @@ namespace LogAnalyzer
     /// </summary>
     public partial class MainWindow : Window
     {
-        private ApplicationViewModel avm;
+        private LogAnalyzerApplication application;
+        private LogAnalyzerApplicationVM applicationVM;
 
         public MainWindow()
         {
             InitializeComponent();
-            DataContext = new ApplicationViewModel(Chart, Chart2, MyCanvas);
-            avm = (ApplicationViewModel)DataContext;
+            application = new LogAnalyzerApplication();
+            applicationVM = new LogAnalyzerApplicationVM(application);
+            DataContext = applicationVM;
         }
     }
 }

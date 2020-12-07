@@ -2,7 +2,6 @@
 using System.Runtime.CompilerServices;
 using System.Collections.ObjectModel;
 using LogAnalyzer.Model;
-using LogAnalyzer.Ulils;
 using System.Collections.Generic;
 using System.Windows.Controls;
 using System.Linq;
@@ -13,30 +12,118 @@ using LiveCharts.Defaults;
 using System.Windows.Media;
 using System.Windows.Shapes;
 using System.Runtime.InteropServices;
-using LiveCharts.Configurations;
-using LogAnalyzer.Model.Readers;
+using LogAnalyzer.Model.Parsers;
+using LogAnalyzer.ViewModel;
 
 namespace LogAnalyzer
 {
-    public class ApplicationViewModel : INotifyPropertyChanged
+    public class LogAnalyzerApplicationVM : INotifyPropertyChanged
     {
 
         [DllImport("shlwapi.dll")]
         public static extern int ColorHLSToRGB(int H, int L, int S);
 
-        private LogFile selectedLog;
+        private List<LogFileVM> logFilesVM;
+        public List<LogFileVM> LogFilesVM { get { return logFilesVM; } }
 
-        private ObservableCollection<LogFile> logs;// { get; set; }
+        private ConfigFile configFile;
 
-        private SeriesCollection seriesTest;
-        private SeriesCollection seriesTest2;
-        private CartesianChart chart;
-        private CartesianChart chart2;
-        private Canvas canvas;
+        private string selectedTabType;
+
+        private LogFileVM selectedLog;
+        public LogFileVM SelectedLog
+        {
+            get
+            {
+                return selectedLog;
+            }
+            set
+            {
+                selectedTabType = selectedLog.SelectedTabType;
+                selectedLog = value;
+                selectedLog.SelectedTabType = selectedTabType;
+                OnPropertyChanged("SelectedLog");
+            }
+        }
+
+        private SeriesCollection block0SeriesUp;
+        public SeriesCollection Block0SeriesUp { get { return block0SeriesUp; } }
+
+        private SeriesCollection block0SeriesBottom;
+        public SeriesCollection Block0SeriesBottom { get { return block0SeriesBottom; } }
+
+        private LogAnalyzerApplication application;
+
+        public LogAnalyzerApplicationVM(LogAnalyzerApplication application)
+        {
+            this.application = application;
+
+            logFilesVM = application.LogFiles.Select(l => new LogFileVM(l)).ToList();
+            configFile = application.ConfigFile;
+
+            selectedLog = logFilesVM[0];
+            selectedLog.PropertyChanged += onChangeTabType;
+            selectedLog.selectFirstTabType();   
+        }
+
+        private void onChangeTabType(object sender, PropertyChangedEventArgs e)
+        {
+            if (e.PropertyName == "SelectedTabType")
+            {
+                string selTabType = selectedLog.SelectedTabType;
+                block0SeriesUp = calcBlock0SeriesUp(selTabType);
+                block0SeriesBottom = calcBlock0SeriesBottom(selTabType);
+                OnPropertyChanged("Block0SeriesUp");
+                OnPropertyChanged("block0SeriesBottom");
+            }
+        }
+
+        private SeriesCollection calcBlock0SeriesUp(string tabType)
+        {
+            return calcBlock0Series(tabType, new string[] { configFile.Block0Params[1] });
+        }
+
+        private SeriesCollection calcBlock0SeriesBottom(string tabType)
+        {
+            return calcBlock0Series(tabType,
+                    new string[] { configFile.Block0Params[2], configFile.Block0Params[3], configFile.Block0Params[4] });
+        }
+
+        private SeriesCollection calcBlock0Series(string tabType, string[] configParams)
+        {
+            SeriesCollection result = new SeriesCollection();
+
+            foreach (string configParam in configParams)
+            {
+                int[] values = logFilesVM.Select(l => l.DataBlock0.getDataLine(tabType).getValue(configParam).Value).ToArray();
+                Dictionary<int, int> countValues = values.GroupBy(x => x)
+                  .ToDictionary(x => x.Key, y => y.Count());
+                int[] sortKeys = countValues.Keys.ToArray();
+                Array.Sort(sortKeys);
+                ChartValues<ObservablePoint> points =
+                    new ChartValues<ObservablePoint>(sortKeys.Select(k => new ObservablePoint(k, countValues[k])).ToArray());
+
+                LineSeries newLineSeries = new LineSeries
+                {
+                    Values = points,
+                    Title = configParam,
+                    PointGeometry = DefaultGeometries.Diamond,
+                    Fill = Brushes.Transparent,
+                };
+                result.Add(newLineSeries);
+            }
+
+            return result;
+        }
+
+        /*private void onChangeTabType()
+        {
+
+        }*/
 
         //bool flag = false;
 
-        public SeriesCollection SeriesTest
+        /*public SeriesCollection SeriesTest
         {
             get
             {
@@ -61,55 +148,34 @@ namespace LogAnalyzer
                 seriesTest2 = value;
                 OnPropertyChanged("SeriesTest2");
             }
-        }
+        }*/
 
-        public ObservableCollection<LogFile> Logs
+        /*public ObservableCollection<LogFile> Logs
         {
-            get { return logs; }
-        }
+            get { return logFiles; }
+        }*/
         System.Drawing.Color ccc;
-        public LogFile SelectedLog
-        {
-            get { return selectedLog; }
-            set
-            {
-                selectedLog = value;
-                OnPropertyChanged("SelectedLog");
-                Test();
-                Test2();
-                
-                /*System.Drawing.Color[] colorArray = new System.Drawing.Color[19];
-                for (int hue = 0; hue < 19; hue++)
-                {
-                    colorArray[hue] = (System.Drawing.Color)new HSLColor(hue * 20, 0.25 * 360, 1.0 * 360);
-                }*/
-                int yyy = 5;
-            }
-        }     
 
-        public ApplicationViewModel(CartesianChart chart, CartesianChart chart2, Canvas canvas)
-        {
-            MyFileReader fileReader = new MyFileReader();
-            ConfigFile configFile = ConfigParser.Parse();
-            logs = new ObservableCollection<LogFile>(LogsParser.Parse(configFile));
-            if (configFile == null)
-            {
-                System.Windows.Application.Current.Shutdown();
-                return;
-            }
-            logs = new ObservableCollection<LogFile>(fileReader.Read());
-            this.chart = chart;
-            this.chart2 = chart2;
-            this.canvas = canvas;
-            foreach (LogFile log in logs)
-            {
-                log.PropertyChanged += new PropertyChangedEventHandler(chatter_PropertyChanged);
-            }
+        /*public LogFile SelectedLog
+{
+get { return selectedLog; }
+set
+{
+selectedLog = value;
+OnPropertyChanged("SelectedLog");
+Test();
+Test2();
 
-            return;  
-        }
+System.Drawing.Color[] colorArray = new System.Drawing.Color[19];
+for (int hue = 0; hue < 19; hue++)
+{
+colorArray[hue] = (System.Drawing.Color)new HSLColor(hue * 20, 0.25 * 360, 1.0 * 360);
+}
+int yyy = 5;
+}
+}  */
 
-        public void Test2()
+        /*public void Test2()
         {
             canvas.Children.Clear();
             Ellipse circle = new Ellipse()
@@ -217,28 +283,28 @@ namespace LogAnalyzer
                 canvas.Children.Add(ln[iii]);
                 iii++;
             }
-        }
+        }*/
 
         private void chatter_PropertyChanged(object sender, PropertyChangedEventArgs e)
         {
-            if (e.PropertyName == "SelectedTabType")
-                Test();
+            /*if (e.PropertyName == "SelectedTabType")
+                Test();*/
         }
 
-        public void Test()
+        /*public void Test()
         {
-            /*if (flag)
+            if (flag)
                 return;
-            flag = true;*/
+            flag = true;
             string s = "OpeningCount";// d.Key;
-            string s2 = selectedLog.SelectedTabType;
+            string s2 = "";// selectedLog.SelectedTabType;
             
             List<int> test2 = new List<int>();
-            int[] values = logs.Select(l => l.Blocks[0].Lines[s2].Values[s].Value).ToArray();
+            int[] values = logFiles.Select(l => l.Blocks[0].Lines[s2].Values[s].Value).ToArray();
 
-            int[] valuesF = logs.Select(l => l.Blocks[0].Lines[s2].Values["FirstTime"].Value).ToArray();
-            int[] valuesL = logs.Select(l => l.Blocks[0].Lines[s2].Values["LongestTime"].Value).ToArray();
-            int[] valuesT = logs.Select(l => l.Blocks[0].Lines[s2].Values["TotalTime"].Value).ToArray();
+            int[] valuesF = logFiles.Select(l => l.Blocks[0].Lines[s2].Values["FirstTime"].Value).ToArray();
+            int[] valuesL = logFiles.Select(l => l.Blocks[0].Lines[s2].Values["LongestTime"].Value).ToArray();
+            int[] valuesT = logFiles.Select(l => l.Blocks[0].Lines[s2].Values["TotalTime"].Value).ToArray();
 
             Dictionary<int, int> query = values.GroupBy(x => x)
               .ToDictionary(x => x.Key, y => y.Count());
@@ -309,14 +375,14 @@ namespace LogAnalyzer
                     Fill = Brushes.Transparent,
                 },
 
-                /*new ColumnSeries
+                new ColumnSeries
                 {
                     Values = new ChartValues<ObservablePoint>{ new ObservablePoint(cur, query[cur]) },
                     MaxColumnWidth = 10,
                     Fill = Brushes.Red,
                     Title = "Current Value",
 
-                }*/
+                }
             };
 
             SeriesTest2 = new SeriesCollection
@@ -330,13 +396,13 @@ namespace LogAnalyzer
                     Stroke = Brushes.Green,
                     Fill = Brushes.Transparent
                 },
-                /*new ColumnSeries
+                new ColumnSeries
                 {
                     Values = new ChartValues<ObservablePoint>{ new ObservablePoint(curF, queryF[curF]) },
                     MaxColumnWidth = 10,
                     Fill = Brushes.Green,
                     Title = "Current Value"
-                },*/
+                },
                 new LineSeries
                 {
                     Values = pointsL,
@@ -345,14 +411,14 @@ namespace LogAnalyzer
                     Fill = Brushes.Transparent,
                     Stroke = Brushes.Blue,
                 },
-                /*new ColumnSeries
+                new ColumnSeries
                 {
                     Values = new ChartValues<ObservablePoint>{ new ObservablePoint(curL, queryL[curL]) },
                     MaxColumnWidth = 10,
                     Fill = Brushes.Blue,
                     Title = "Current Value"
 
-                },*/
+                },
                 new LineSeries
                 {
                     Values = pointsT,
@@ -361,18 +427,18 @@ namespace LogAnalyzer
                     Stroke = Brushes.Red,
                     Fill = Brushes.Transparent,
                 },
-                /*new ColumnSeries
+                new ColumnSeries
                 {
                     Values = new ChartValues<ObservablePoint>{ new ObservablePoint(curT, queryT[curT]) },
                     MaxColumnWidth = 10,
                     Fill = Brushes.Red,
                     Title = "Current Value"
-                }*/
+                }
             };
             chart.Series = SeriesTest;
             chart2.Series = SeriesTest2;
             
-        }
+        }*/
 
         public event PropertyChangedEventHandler PropertyChanged;
 

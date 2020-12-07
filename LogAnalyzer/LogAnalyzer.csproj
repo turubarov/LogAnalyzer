@@ -67,6 +67,8 @@
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>
     </ApplicationDefinition>
+    <Compile Include="Model\LogAnalyzerApplication.cs" />
+    <Compile Include="ViewModel\LogFileVM.cs" />
     <Page Include="MainWindow.xaml">
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>
@@ -84,11 +86,11 @@
     <Compile Include="Model\DataLine.cs" />
     <Compile Include="Model\Data.cs" />
     <Compile Include="Model\InputFiles\LogFile.cs" />
-    <Compile Include="Model\Parsers\LogsParser.cs" />
-    <Compile Include="Model\Parsers\ConfigParser.cs" />
+    <Compile Include="Parsers\LogsParser.cs" />
+    <Compile Include="Parsers\ConfigParser.cs" />
     <Compile Include="Ulils\HSLColor.cs" />
-    <Compile Include="Model\Parsers\MyFileReader.cs" />
-    <Compile Include="ViewModel\ApplicationViewModel.cs" />
+    <Compile Include="Parsers\MyFileReader.cs" />
+    <Compile Include="ViewModel\LogAnalyzerApplicationVM.cs" />
     <Compile Include="MainWindow.xaml.cs">
       <DependentUpon>MainWindow.xaml</DependentUpon>
       <SubType>Code</SubType>

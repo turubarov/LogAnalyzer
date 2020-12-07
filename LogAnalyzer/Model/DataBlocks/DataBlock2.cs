@@ -8,11 +8,16 @@ namespace LogAnalyzer.Model.DataBlocks
 {
     public class DataBlock2
     {
-        private Dictionary<string, DataLine> lines;
+        private Dictionary<string, DataLine> dataLines;
 
-        public DataBlock2(Dictionary<string, DataLine> lines)
+        public DataBlock2(Dictionary<string, DataLine> dataLines)
         {
-            this.lines = lines;
+            this.dataLines = dataLines;
+        }
+
+        public DataLine getDataLine(string tabType)
+        {
+            return dataLines[tabType];
         }
     }
 }
