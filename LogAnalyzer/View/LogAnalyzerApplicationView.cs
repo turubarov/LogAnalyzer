@@ -2,6 +2,7 @@
 using System.ComponentModel;
 using System.Runtime.CompilerServices;
 using System.Runtime.InteropServices;
+using System.Windows;
 using System.Windows.Controls;
 using System.Windows.Input;
 using System.Windows.Media;
@@ -16,6 +17,9 @@ namespace LogAnalyzer.View
 
         private LogAnalyzerApplicationVM applicationVM;
         private MainWindow mainWindow;
+
+        private TextBlock[] ct;
+        private int countCt;
 
         public LogAnalyzerApplicationView(MainWindow mainWindow, LogAnalyzerApplicationVM applicationVM)
         {
@@ -32,7 +36,25 @@ namespace LogAnalyzer.View
             {
                 int[,] countOfTransition = applicationVM.SelectedLog.DataBlock1.CountOfTransitions;
                 string[] tabTypes = applicationVM.SelectedLog.DataBlock0.getTabTypes();
-                redrawGraph(countOfTransition, tabTypes);    
+                redrawGraph(countOfTransition, tabTypes);
+            }
+            if (e.PropertyName == "ShowCount")
+            {
+                Canvas canvas = mainWindow.GraphCanvas;
+                if (applicationVM.ShowCount)
+                {
+                    for (int i = 0; i < countCt; i++)
+                    {
+                        ct[i].Visibility = Visibility.Visible;
+                    }
+                }
+                else
+                {
+                    for (int i = 0; i < countCt; i++)
+                    {
+                        ct[i].Visibility = Visibility.Hidden;
+                    }
+                }
             }
         }
 
@@ -75,6 +97,10 @@ namespace LogAnalyzer.View
                 canvas.Children.Add(tb[i]);
                 tb[i].UpdateLayout();
 
+                int delta = (int)tb[i].ActualWidth;
+                //if (tb[i].ActualWidth == 0)
+                    delta = (int)(tb[i].Text.Length * 6.5);
+
                 if (x > 0)
                 {
                     Canvas.SetTop(tb[i], 110 + y + 5);
@@ -83,12 +109,14 @@ namespace LogAnalyzer.View
                 else
                 {
                     Canvas.SetTop(tb[i], 110 + y + 5);
-                    Canvas.SetLeft(tb[i], 130 + x - tb[i].ActualWidth - 5);
+                    Canvas.SetLeft(tb[i], 130 + x - delta - 5);
                 }
             }
 
             Line[] ln = new Line[1000];
-            
+            ct = new TextBlock[100];
+            countCt = 0;
+
             int iii = 0;
             int max = 0;
             for (int i = 0; i < count; i++)
@@ -143,10 +171,24 @@ namespace LogAnalyzer.View
                             StrokeThickness = 2,
                             Stroke = new SolidColorBrush(Color.FromRgb(ccc[countOfTransition[xi, yi] - 1].R, ccc[countOfTransition[xi, yi] - 1].G, ccc[countOfTransition[xi, yi] - 1].B)),
                         };
+                        ct[countCt] = new TextBlock
+                        {
+                            Text = countOfTransition[xi, yi].ToString(),
+                            FontWeight = FontWeights.UltraBold,
+                            FontSize = 14
+                        };
+                        ct[countCt].UpdateLayout();
+                        Canvas.SetTop(ct[countCt], (y_av + y2) / 2 - 7);
+                        Canvas.SetLeft(ct[countCt], (x_av + x2) / 2 - 4);
+                        countCt++;
                         canvas.Children.Add(ln[iii++]);
                         SolidColorBrush scb;
+                        bool nl = false;
                         if (countOfTransition[yi, xi] > 0)
+                        {
                             scb = new SolidColorBrush(Color.FromRgb(ccc[countOfTransition[yi, xi] - 1].R, ccc[countOfTransition[yi, xi] - 1].G, ccc[countOfTransition[yi, xi] - 1].B));
+                            nl = true;
+                        }
                         else
                             scb = new SolidColorBrush(Color.FromRgb(0, 0, 0));
                         ln[iii] = new Line
@@ -158,9 +200,28 @@ namespace LogAnalyzer.View
                             StrokeThickness = 2,
                             Stroke = scb,
                         };
+
+                        if (nl)
+                        {
+                            ct[countCt] = new TextBlock
+                            {
+                                Text = countOfTransition[xi, yi].ToString(),
+                                FontWeight = FontWeights.UltraBold,
+                                FontSize = 14
+                            };
+                            ct[countCt].UpdateLayout();
+                            Canvas.SetTop(ct[countCt], (y_av + y1) / 2 - 10);
+                            Canvas.SetLeft(ct[countCt], (x_av + x1) / 2 - 5);
+                            countCt++;
+                        }
+
                         canvas.Children.Add(ln[iii++]);
                     }
                 }
+            }
+            for (int i = 0; i< countCt; i++ )
+            {
+                canvas.Children.Add(ct[i]);
             }
         }
 

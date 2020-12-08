@@ -55,11 +55,12 @@
                     </ItemsControl>
                 </StackPanel>
             <StackPanel  Grid.Column="1" Grid.Row="0">
-                    <Canvas Name="GraphCanvas">
-                        
-                    </Canvas>
-                </StackPanel>
-            
+                <Canvas Name="GraphCanvas">
+
+                </Canvas>
+                
+            </StackPanel>
+            <CheckBox IsChecked="{Binding ShowCount}" Grid.Column="1" Grid.Row="1" Margin="20">Show count transition</CheckBox>
             <StackPanel  Grid.Column="0" Grid.Row="1" Margin="20">
                 <lvc:CartesianChart LegendLocation="Right" Name="Chart" Series="{Binding Block0SeriesUp}" Height="200">
                     <lvc:CartesianChart.AxisX>

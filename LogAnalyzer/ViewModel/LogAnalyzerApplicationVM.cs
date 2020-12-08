@@ -19,6 +19,20 @@ namespace LogAnalyzer
 
         private ConfigFile configFile;
 
+        private bool showCount = true;
+        public bool ShowCount
+        {
+            get
+            {
+                return showCount;
+            }
+            set
+            {
+                showCount = value;
+                OnPropertyChanged("ShowCount");
+            }
+        }
+
         private string selectedTabType;
         private string selectedTabType2;
 
