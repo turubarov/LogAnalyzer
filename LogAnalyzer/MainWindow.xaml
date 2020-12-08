@@ -17,9 +17,13 @@
                 <RowDefinition Height="*"></RowDefinition>
                 <RowDefinition Height="2*"></RowDefinition>
             </Grid.RowDefinitions>
-            <lvc:PieChart Grid.Column="0" Grid.Row="0" Series="{Binding PieBlock0Series}">
-                
-            </lvc:PieChart>
+            <lvc:CartesianChart Series="{Binding StackColumnSeries}">
+                <lvc:CartesianChart.AxisX>
+                    <lvc:Axis Title="TabTypes" 
+                          Labels="{Binding SelectedLog.TabTypes}" 
+                          Separator="{x:Static lvc:DefaultAxes.CleanSeparator}" />
+                </lvc:CartesianChart.AxisX>
+            </lvc:CartesianChart>
 
             <ListBox Grid.Column="0" Grid.Row="1" ItemsSource="{Binding LogFilesVM}"
                  SelectedItem="{Binding SelectedLog}" DisplayMemberPath="FileName">
@@ -58,22 +62,27 @@
             
             <StackPanel  Grid.Column="0" Grid.Row="1" Margin="20">
                 <lvc:CartesianChart LegendLocation="Right" Name="Chart" Series="{Binding Block0SeriesUp}" Height="200">
-
-                    <!--<lvc:CartesianChart.AxisX>
+                    <lvc:CartesianChart.AxisX>
                         <lvc:Axis>
                             <lvc:Axis.Sections>
-                                <lvc:AxisSection Value="3" Stroke="#FFFF0000" StrokeThickness="2" Panel.ZIndex="3" />
-                                <lvc:AxisSection Value="3" Stroke="#FF00FF00" StrokeThickness="5" Panel.ZIndex="2" />
-                                <lvc:AxisSection Value="3" Stroke="#FF0000FF" StrokeThickness="8" Panel.ZIndex="1" />
+                                <lvc:AxisSection Value="{Binding CurOpeningCount}" Stroke="#FF0000FF" StrokeThickness="2" />
                             </lvc:Axis.Sections>
                         </lvc:Axis>
-                    </lvc:CartesianChart.AxisX>-->
+                    </lvc:CartesianChart.AxisX>
                 </lvc:CartesianChart>
                 
             </StackPanel>
             <StackPanel  Grid.Column="0" Grid.Row="2" Margin="20">
-                <lvc:CartesianChart LegendLocation="Right" Name="Chart2" Series="{Binding Block0SeriesBottom}" Height="200">
-
+                <lvc:CartesianChart LegendLocation="Right" Series="{Binding Block0SeriesBottom}" Height="200">
+                    <lvc:CartesianChart.AxisX>
+                        <lvc:Axis>
+                            <lvc:Axis.Sections>
+                                <lvc:AxisSection Value="{Binding CurFirstTime}" Stroke="#FF0000FF" StrokeThickness="2" />
+                                <lvc:AxisSection Value="{Binding CurLongestTime}" Stroke="#FFFF0000" StrokeThickness="2" />
+                                <lvc:AxisSection Value="{Binding CurTotalTime}" Stroke="#FFFFFF00" StrokeThickness="2" />
+                            </lvc:Axis.Sections>
+                        </lvc:Axis>
+                    </lvc:CartesianChart.AxisX>
                 </lvc:CartesianChart>
             </StackPanel>
             <StackPanel HorizontalAlignment="Left" Grid.Column="2" Grid.Row="0">
@@ -91,12 +100,25 @@
             </StackPanel>
             <StackPanel  Grid.Column="2" Grid.Row="1" Margin="20">
                 <lvc:CartesianChart LegendLocation="Right" Series="{Binding Block2SeriesUp}" Height="200">
-
+                    <lvc:CartesianChart.AxisX>
+                        <lvc:Axis>
+                            <lvc:Axis.Sections>
+                                <lvc:AxisSection Value="{Binding CurCalled}" Stroke="#FF0000FF" StrokeThickness="2" />
+                                <lvc:AxisSection Value="{Binding CurTotal}" Stroke="#FFFF0000" StrokeThickness="2" />
+                            </lvc:Axis.Sections>
+                        </lvc:Axis>
+                    </lvc:CartesianChart.AxisX>
                 </lvc:CartesianChart>
             </StackPanel>
             <StackPanel  Grid.Column="2" Grid.Row="2" Margin="20">
                 <lvc:CartesianChart LegendLocation="Right"  Series="{Binding Block2SeriesBottom}" Height="200">
-
+                    <lvc:CartesianChart.AxisX>
+                        <lvc:Axis>
+                            <lvc:Axis.Sections>
+                                <lvc:AxisSection Value="{Binding CurSpend}" Stroke="#FF0000FF" StrokeThickness="2" />
+                            </lvc:Axis.Sections>
+                        </lvc:Axis>
+                    </lvc:CartesianChart.AxisX>
                 </lvc:CartesianChart>
             </StackPanel>
         </Grid>

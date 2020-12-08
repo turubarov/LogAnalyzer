@@ -37,11 +37,52 @@ namespace LogAnalyzer
                 selectedLog.SelectedTabType = selectedTabType;
                 selectedLog.SelectedTabType2 = selectedTabType2;
 
+                curOpeningCount = selectedLog.DataBlock0.getDataLine(selectedTabType).getValue("OpeningCount").Value;
+                curFirstTime = selectedLog.DataBlock0.getDataLine(selectedTabType).getValue("FirstTime").Value;
+                curLongestTime = selectedLog.DataBlock0.getDataLine(selectedTabType).getValue("LongestTime").Value;
+                curTotalTime = selectedLog.DataBlock0.getDataLine(selectedTabType).getValue("TotalTime").Value;
+
                 selectedLog.PropertyChanged += onChangeTabType;
+
+                stackColumnSeries = calcStackColumnSeries();
+
+                OnPropertyChanged("CurOpeningCount");
+                OnPropertyChanged("CurFirstTime");
+                OnPropertyChanged("CurLongestTime");
+                OnPropertyChanged("CurTotalTime");
+
+                OnPropertyChanged("CurCalled");
+                OnPropertyChanged("CurTotal");
+                OnPropertyChanged("CurSpend");
+
                 OnPropertyChanged("SelectedLog");
+                OnPropertyChanged("StackColumnSeries");
                 OnPropertyChanged("RedrawGraph");
             }
         }
+
+        private int curOpeningCount;
+        public int CurOpeningCount { get { return curOpeningCount; } }
+
+        private int curFirstTime;
+        public int CurFirstTime { get { return curFirstTime; } }
+
+        private int curLongestTime;
+        public int CurLongestTime { get { return curLongestTime; } }
+
+        private int curTotalTime;
+        public int CurTotalTime { get { return curTotalTime; } }
+
+
+        private int curCalled;
+        public int CurCalled { get { return curCalled; } }
+
+        private int curTotal;
+        public int CurTotal { get { return curTotal; } }
+
+        private int curSpend;
+        public int CurSpend { get { return curSpend; } }
+
 
         private SeriesCollection block0SeriesUp;
         public SeriesCollection Block0SeriesUp { get { return block0SeriesUp; } }
@@ -55,8 +96,8 @@ namespace LogAnalyzer
         private SeriesCollection block2SeriesBottom;
         public SeriesCollection Block2SeriesBottom { get { return block2SeriesBottom; } }
 
-        private SeriesCollection pieBlock0Series;
-        public SeriesCollection PieBlock0Series { get { return pieBlock0Series; } }
+        private SeriesCollection stackColumnSeries;
+        public SeriesCollection StackColumnSeries { get { return stackColumnSeries; } }
 
         private LogAnalyzerApplication application;
 
@@ -72,7 +113,7 @@ namespace LogAnalyzer
             selectedLog.selectFirstTabType();
             selectedLog.selectFirstTabType2();
 
-            pieBlock0Series = calcPieBlock0Series();
+            stackColumnSeries = calcStackColumnSeries();
             OnPropertyChanged("RedrawGraph");
             OnPropertyChanged("PieBlock0Series");
         }
@@ -84,10 +125,18 @@ namespace LogAnalyzer
                 string selTabType = selectedLog.SelectedTabType;
                 block0SeriesUp = calcBlock0SeriesUp(selTabType);
                 block0SeriesBottom = calcBlock0SeriesBottom(selTabType);
-                pieBlock0Series = calcPieBlock0Series();
                 OnPropertyChanged("Block0SeriesUp");
                 OnPropertyChanged("Block0SeriesBottom");
-                OnPropertyChanged("PieBlock0Series");
+
+                curOpeningCount = selectedLog.DataBlock0.getDataLine(selTabType).getValue("OpeningCount").Value;
+                curFirstTime = selectedLog.DataBlock0.getDataLine(selTabType).getValue("FirstTime").Value;
+                curLongestTime = selectedLog.DataBlock0.getDataLine(selTabType).getValue("LongestTime").Value;
+                curTotalTime = selectedLog.DataBlock0.getDataLine(selTabType).getValue("TotalTime").Value;
+
+                OnPropertyChanged("CurOpeningCount");
+                OnPropertyChanged("CurFirstTime");
+                OnPropertyChanged("CurLongestTime");
+                OnPropertyChanged("CurTotalTime");
             }
             if (e.PropertyName == "SelectedTabType2")
             {
@@ -95,6 +144,14 @@ namespace LogAnalyzer
                 block2SeriesBottom = calcBlock2SeriesBottom(selectedLog.SelectedTabType2);
                 OnPropertyChanged("Block2SeriesUp");
                 OnPropertyChanged("Block2SeriesBottom");
+
+                curCalled = selectedLog.DataBlock2.getDataLine(selectedLog.SelectedTabType2).getValue("CalledInFirstOpenTab").Value;
+                curTotal = selectedLog.DataBlock2.getDataLine(selectedLog.SelectedTabType2).getValue("TotalCalledCount").Value;
+                curSpend = selectedLog.DataBlock2.getDataLine(selectedLog.SelectedTabType2).getValue("SpentTime").Value;
+
+                OnPropertyChanged("CurCalled");
+                OnPropertyChanged("CurTotal");
+                OnPropertyChanged("CurSpend");
             }
         }
 
@@ -174,27 +231,31 @@ namespace LogAnalyzer
             return result;
         }
 
-        private SeriesCollection calcPieBlock0Series()
+        private SeriesCollection calcStackColumnSeries()
         {
+            List<int> firstTimeVal = selectedLog.TabTypes.Select(t => selectedLog.DataBlock0.getDataLine(t).getValue("FirstTime").Value).ToList();
+            List<int> longestTimeVal = selectedLog.TabTypes.Select(t => selectedLog.DataBlock0.getDataLine(t).getValue("LongestTime").Value).ToList();
+            List<int> totalTimeVal = selectedLog.TabTypes.Select(t => selectedLog.DataBlock0.getDataLine(t).getValue("TotalTime").Value).ToList();
             return new SeriesCollection
             {
-                new PieSeries
+                new StackedColumnSeries
                 {
-                    Title = configFile.Block0Params[2],
-                    Values = new ChartValues<int> {selectedLog.DataBlock0.getDataLine(selectedLog.SelectedTabType).Values[configFile.Block0Params[2]].Value},
-                    DataLabels = true,
+
+                    Values = new ChartValues<int> (firstTimeVal),
+                    StackMode = StackMode.Values, 
+                    Title = "FirstTime"
                 },
-                new PieSeries
+                new StackedColumnSeries
                 {
-                    Title = configFile.Block0Params[3],
-                    Values = new ChartValues<int> {selectedLog.DataBlock0.getDataLine(selectedLog.SelectedTabType).Values[configFile.Block0Params[3]].Value},
-                    DataLabels = true,
+                    Values = new ChartValues<int> (longestTimeVal),
+                    StackMode = StackMode.Values,
+                    Title = "LongestTime"
                 },
-                new PieSeries
+                new StackedColumnSeries
                 {
-                    Title = configFile.Block0Params[4],
-                    Values = new ChartValues<int> {selectedLog.DataBlock0.getDataLine(selectedLog.SelectedTabType).Values[configFile.Block0Params[4]].Value},
-                    DataLabels = true,
+                    Values = new ChartValues<int> (totalTimeVal),
+                    StackMode = StackMode.Values,
+                    Title = "TotalTime"
                 }
             };
         }
