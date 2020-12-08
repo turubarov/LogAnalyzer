@@ -89,6 +89,16 @@
                     </ItemsControl.ItemTemplate>
                 </ItemsControl>
             </StackPanel>
+            <StackPanel  Grid.Column="2" Grid.Row="1" Margin="20">
+                <lvc:CartesianChart LegendLocation="Right" Series="{Binding Block2SeriesUp}" Height="200">
+
+                </lvc:CartesianChart>
+            </StackPanel>
+            <StackPanel  Grid.Column="2" Grid.Row="2" Margin="20">
+                <lvc:CartesianChart LegendLocation="Right"  Series="{Binding Block2SeriesBottom}" Height="200">
+
+                </lvc:CartesianChart>
+            </StackPanel>
         </Grid>
     </Grid>
 </Window>

@@ -49,6 +49,12 @@ namespace LogAnalyzer
         private SeriesCollection block0SeriesBottom;
         public SeriesCollection Block0SeriesBottom { get { return block0SeriesBottom; } }
 
+        private SeriesCollection block2SeriesUp;
+        public SeriesCollection Block2SeriesUp { get { return block2SeriesUp; } }
+
+        private SeriesCollection block2SeriesBottom;
+        public SeriesCollection Block2SeriesBottom { get { return block2SeriesBottom; } }
+
         private SeriesCollection pieBlock0Series;
         public SeriesCollection PieBlock0Series { get { return pieBlock0Series; } }
 
@@ -83,6 +89,13 @@ namespace LogAnalyzer
                 OnPropertyChanged("Block0SeriesBottom");
                 OnPropertyChanged("PieBlock0Series");
             }
+            if (e.PropertyName == "SelectedTabType2")
+            {
+                block2SeriesUp = calcBlock2SeriesUp(selectedLog.SelectedTabType2);
+                block2SeriesBottom = calcBlock2SeriesBottom(selectedLog.SelectedTabType2);
+                OnPropertyChanged("Block2SeriesUp");
+                OnPropertyChanged("Block2SeriesBottom");
+            }
         }
 
         private SeriesCollection calcBlock0SeriesUp(string tabType)
@@ -96,6 +109,17 @@ namespace LogAnalyzer
                     new string[] { configFile.Block0Params[2], configFile.Block0Params[3], configFile.Block0Params[4] });
         }
 
+        private SeriesCollection calcBlock2SeriesUp(string tabType)
+        {
+            return calcBlock2Series(tabType, new string[] { configFile.Block2Params[2], configFile.Block2Params[3] });
+        }
+
+        private SeriesCollection calcBlock2SeriesBottom(string tabType)
+        {
+            return calcBlock2Series(tabType,
+                    new string[] {configFile.Block2Params[4] });
+        }
+
         private SeriesCollection calcBlock0Series(string tabType, string[] configParams)
         {
             SeriesCollection result = new SeriesCollection();
@@ -103,6 +127,33 @@ namespace LogAnalyzer
             foreach (string configParam in configParams)
             {
                 int[] values = logFilesVM.Select(l => l.DataBlock0.getDataLine(tabType).getValue(configParam).Value).ToArray();
+                Dictionary<int, int> countValues = values.GroupBy(x => x)
+                  .ToDictionary(x => x.Key, y => y.Count());
+                int[] sortKeys = countValues.Keys.ToArray();
+                Array.Sort(sortKeys);
+                ChartValues<ObservablePoint> points =
+                    new ChartValues<ObservablePoint>(sortKeys.Select(k => new ObservablePoint(k, countValues[k])).ToArray());
+
+                LineSeries newLineSeries = new LineSeries
+                {
+                    Values = points,
+                    Title = configParam,
+                    PointGeometry = DefaultGeometries.Diamond,
+                    Fill = Brushes.Transparent,
+                };
+                result.Add(newLineSeries);
+            }
+
+            return result;
+        }
+
+        private SeriesCollection calcBlock2Series(string tabType, string[] configParams)
+        {
+            SeriesCollection result = new SeriesCollection();
+
+            foreach (string configParam in configParams)
+            {
+                int[] values = logFilesVM.Select(l => l.DataBlock2.getDataLine(tabType).getValue(configParam).Value).ToArray();
                 Dictionary<int, int> countValues = values.GroupBy(x => x)
                   .ToDictionary(x => x.Key, y => y.Count());
                 int[] sortKeys = countValues.Keys.ToArray();
